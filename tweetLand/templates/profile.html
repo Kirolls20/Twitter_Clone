@@ -1,0 +1,52 @@
+{% include 'base.html' %}
+{% load static %}
+{% block content %}
+
+<br>
+{% if profile %}
+<div class="container text-center">
+    <div class="row">
+        <div class="col-8">
+                <img src="{% static 'images/default_profile_pic.jpg'%}" class="img-fluid rounded-start" alt="Profile picture">
+            <h2>{{profile.user.username}} Profile</h2>
+        </div>
+        <div class="col-4">
+            <div class="card border-success mb-3" style="max-width: 18rem;">
+                <div class="card-header bg-transparent border-success">{{profile.follows.count}} Follows You </div>
+                <div class="card-body text-success">
+                    {% for follow in profile.follows.all %}
+                        {% if follow != request.user %}
+                        <a href="{% url 'profile' follow.user.id %}"> @{{follow|lower}}</a><br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+              </div>
+              <div class="card border-success mb-3" style="max-width: 18rem;">
+                <div class="card-header bg-transparent border-success"> You Followed_by {{profile.followed_by.count }}</div>
+                <div class="card-body text-success">
+                    {% for followed in profile.followed_by.all %}
+                        <a href="{% url 'profile' followed.user.id %}">@{{followed|lower}}</a><br>
+                  {% endfor %}
+                </div>
+              </div>
+              
+              <form action="#" method="post">
+                {% csrf_token %}
+                {% if profile in user.profile.follows.all %}
+                   <button class="btn btn-outline-danger" name="follow" value="unfollow">UnFollow @{{profile.user.username}}</button>
+
+                {% else %}
+                    <button class="btn btn-outline-success" name="follow" value="follow">Follow @{{profile.user.username}}</button>
+                {% endif %}
+              </form>
+        </div>
+
+    </div>
+</div>
+
+
+        
+ 
+{% endif %}
+    
+ {% endblock %} 
