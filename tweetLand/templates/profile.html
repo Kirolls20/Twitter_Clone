@@ -9,6 +9,20 @@
         <div class="col-8">
                 <img src="{% static 'images/default_profile_pic.jpg'%}" class="img-fluid rounded-start" alt="Profile picture">
             <h2>{{profile.user.username}} Profile</h2>
+            {% if tweets %}
+                {% for tweet in tweets.all %}
+                <div class="card">
+                    <!-- <div class="card-header">
+                       <a href="{% url 'profile' tweet.user.id %}"> by @{{tweet.user|lower}}</a>
+                    </div> -->
+                    <div class="card-body">
+                        <h4 class="text-muted">{{tweet.tweet}}</h4>
+                        <small class="text-muted">{{tweet.updated_at}}</small>
+                        
+                    </div>
+                    </div><br>  
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="col-4">
             <div class="card border-success mb-3" style="max-width: 18rem;">

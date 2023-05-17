@@ -1,9 +1,21 @@
 {% include 'base.html' %}
 
 {% block content %}
-<h1>Hello TweetLand Users</h1>
-
-
+<h1>Feeds..</h1>
+{% if  tweets %}
+    {% for tweet in tweets %}
+            <div class="card">
+    <div class="card-header">
+       <a href="{% url 'profile' tweet.user.id %}"> by @{{tweet.user|lower}}</a>
+    </div>
+    <div class="card-body">
+        <h4 class="text-muted">{{tweet.tweet}}</h4>
+        <small class="text-muted">{{tweet.updated_at}}</small>
+        
+    </div>
+    </div><br>  
+    {% endfor %}
+{% endif %}
 {% endblock %}
 
 

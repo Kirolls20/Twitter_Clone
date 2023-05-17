@@ -8,6 +8,10 @@ class Tweet(models.Model):
     tweet = models.CharField(max_length=200,blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.user.username}  {self.created_at} '
+    
     
 
 # Create your models here.
@@ -17,6 +21,7 @@ class Profile(models.Model):
     follows= models.ManyToManyField("self", related_name='followed_by',
             symmetrical=False,
             blank=True)
+    
     date_created = models.DateField(User,auto_now_add=True)
     date_modified= models.DateTimeField(User,auto_now=True)
     

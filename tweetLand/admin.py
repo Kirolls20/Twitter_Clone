@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group,User
-from .models import Profile
+from .models import Profile ,Tweet
 
 # Register and UnRegister your models here.
 admin.site.unregister(Group)
 admin.site.register(Profile)
+admin.site.register(Tweet)
 
 # Expand The User model with profile model inline 
 class UserProfileInline(admin.StackedInline):
