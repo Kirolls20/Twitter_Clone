@@ -1,7 +1,43 @@
 {% include 'base.html' %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding Tweet</title>
+    <link rel="stylesheet" href="{% static 'css/add_tweet.css' %}">
+</head>
 
 {% block content %}
-<h1>Feeds..</h1>
+<body><br>
+    <h1 style="padding:10px;">Feeds..</h1>
+<div style="display: flex; justify-content: flex-end; margin:40px;">
+    <div class="width:100px;">
+        <button class="btn btn-secondary" id="showPopup">Add Tweet</button>
+        <!-- PopUP Contianer -->
+    <div class="container">
+        <div class="pop-up" id="popup">
+            <h2 style="text-align: center;">Make A tweet!</h2>
+            <form  method="post">
+                {% csrf_token %}
+                <div style="justify-content: center;">
+                    {{form}}
+                </div>
+             
+                <div class="btns-container">
+                    <button type="submit" class="popup-btns">Tweet it</button>
+                    <button id="closePopup" type="button" class="popup-btns">Cancel</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    
+    
+
+    </div>
+</div>
 {% if  tweets %}
     {% for tweet in tweets %}
             <div class="card">
@@ -18,4 +54,14 @@
 {% endif %}
 {% endblock %}
 
+<script>
+    document.getElementById('showPopup').addEventListener('click', function() {
+    console.log('Clicked!')
+    document.querySelector('.pop-up').style.display = 'flex';
+    });
+    document.getElementById('closePopup').addEventListener('click', function() {
+    document.querySelector('.pop-up').style.display = 'none';
+    });
+</script>
 
+</body>
