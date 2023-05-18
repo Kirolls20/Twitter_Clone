@@ -16,23 +16,25 @@
     <div class="width:100px;">
         <button class="btn btn-secondary" id="showPopup">Add Tweet</button>
         <!-- PopUP Contianer -->
-    <div class="container">
-        <div class="pop-up" id="popup">
-            <h2 style="text-align: center;">Make A tweet!</h2>
-            <form  method="post">
-                {% csrf_token %}
-                <div style="justify-content: center;">
-                    {{form}}
-                </div>
-             
-                <div class="btns-container">
-                    <button type="submit" class="popup-btns">Tweet it</button>
-                    <button id="closePopup" type="button" class="popup-btns">Cancel</button>
-                </div>
+
+        <div class="container">
+            <div class="pop-up" id="popup">
+                <h2 style="text-align: center;">Make A tweet!</h2>
+                <form  method="post">
+                    {% csrf_token %}
+                    <div style="justify-content: center;">
+                        {{form}}
+                    </div>
                 
-            </form>
+                    <div class="btns-container">
+                        <button type="submit" class="popup-btns">Tweet it</button>
+                        <button id="closePopup" type="button" class="popup-btns">Cancel</button>
+                    </div>
+                    
+                </form>
+            </div>
         </div>
-    </div>
+
     
     
 

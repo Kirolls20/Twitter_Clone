@@ -1,6 +1,9 @@
 from typing import Any, Dict
 from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth.views import LogoutView
+from django.contrib import messages
 from django.http import HttpResponse 
 from django.views import View
 from django.views.generic import TemplateView,ListView,DetailView
@@ -23,14 +26,41 @@ class HomeView(ListView):
 
     def post(self,request):
         form = TweetForm(request.POST or None)
+        if not request.user.is_authenticated:
+            messages.warning(request, "Sorry, you are not logged in. Please sign in first and try again!")
+            return redirect('home')  # Replace 'login' with your actual login URL
+           
         if request.method =='POST':
             if form.is_valid():
                 tweet=form.save(commit=False)
                 tweet.user = self.request.user
                 form.save()
                 return redirect('home')
+        
+class LoginView(TemplateView):
+    template_name='registration/login.html'
 
- 
+    def post(self,request):
+        if request.method =='POST':
+            username = request.POST['username']
+            password = request.POST['password']
+            user= authenticate(request,username=username,password=password)
+            if user is not None:
+                login(request,user)
+                messages.success(request,('You logged in Successfully!'))
+                return redirect('home')
+            else:
+                messages.success(request,('Something went wrong try again!!'))
+                return redirect('login')
+
+class LogoutView(View):
+    def get(self,request):
+        logout(request)
+        messages.success(request,('You Loggedout See ya soon!'))
+        return redirect('login')
+
+
+    
 class ListUSersView(LoginRequiredMixin,ListView):
     model= Profile
     context_object_name = 'users'

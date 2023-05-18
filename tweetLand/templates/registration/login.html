@@ -1,0 +1,20 @@
+{% include 'base.html' %}
+{% block content %}
+<div class="col-md-6 offset-md-3">
+<h1> SignIn Here </h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Username</label>
+      <input type="text" class="form-control" placeholder="Type Your Username here" name="username">
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label" >Password</label>
+      <input type="password" class="form-control" placeholder="Type Your password here..." name="password" >
+    </div><br>
+    <button type="submit" class="btn btn-primary">SginIn</button>
+  </form>
+</div>
+
+{% endblock %}

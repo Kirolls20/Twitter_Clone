@@ -18,7 +18,7 @@
         {% if user.is_authenticated %}
         <ul>
           <li class="nav-item">
-            <a class="nav-link" href="#">Logout @{{request.user|lower}}</a>
+            <a class="nav-link" href="{% url 'logout' %}">Logout @{{request.user|lower}}</a>
           </li> 
         </ul>
         
@@ -28,7 +28,7 @@
             <a class="nav-link" href="#">SignUP</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">SignIn</a>
+            <a class="nav-link" href="{% url 'login' %}">SignIn</a>
           </li>
         </ul>
         {% endif %}
