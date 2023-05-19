@@ -6,7 +6,7 @@ from django.contrib.auth.views import LogoutView
 from django.contrib import messages
 from django.http import HttpResponse 
 from django.views import View
-from django.views.generic import TemplateView,ListView,DetailView
+from django.views.generic import TemplateView,ListView,DetailView,DeleteView
 from .models import Profile,Tweet
 from .forms import TweetForm
 from django.urls import reverse_lazy 
@@ -35,8 +35,22 @@ class HomeView(ListView):
                 tweet=form.save(commit=False)
                 tweet.user = self.request.user
                 form.save()
+                messages.success(request,('Tweet Sent!'))
                 return redirect('home')
-        
+
+class DeleteTweetView(TemplateView):
+    template_name='home.html'       
+    
+    def post(self,request,**kwargs):
+        tweet_id = self.kwargs['pk']
+        obj = Tweet.objects.get(id= tweet_id)
+        if request.method == 'POST':
+            obj.delete()
+            messages.success(request,('Tweet has been Deleted!!'))
+            return redirect('home')
+        else:
+            return render(request,self.template_name)
+    
 class LoginView(TemplateView):
     template_name='registration/login.html'
 
@@ -50,7 +64,7 @@ class LoginView(TemplateView):
                 messages.success(request,('You logged in Successfully!'))
                 return redirect('home')
             else:
-                messages.success(request,('Something went wrong try again!!'))
+                messages.error(request,('Something went wrong try again!!'))
                 return redirect('login')
 
 class LogoutView(View):

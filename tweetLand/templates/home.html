@@ -29,15 +29,10 @@
                     <div class="btns-container">
                         <button type="submit" class="popup-btns">Tweet it</button>
                         <button id="closePopup" type="button" class="popup-btns">Cancel</button>
-                    </div>
-                    
+                    </div>    
                 </form>
             </div>
         </div>
-
-    
-    
-
     </div>
 </div>
 {% if  tweets %}
@@ -49,8 +44,13 @@
     <div class="card-body">
         <h4 class="text-muted">{{tweet.tweet}}</h4>
         <small class="text-muted">{{tweet.updated_at}}</small>
-        
-    </div>
+        {% if tweet.user == request.user %}
+        <form action="{% url 'delete_tweet' tweet.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger">Delete Me</button>
+        </form> 
+        {% endif %}
+    </div> 
     </div><br>  
     {% endfor %}
 {% endif %}
