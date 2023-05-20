@@ -1,14 +1,15 @@
 from typing import Any, Dict
 from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.views import LogoutView
 from django.contrib import messages
 from django.http import HttpResponse 
 from django.views import View
-from django.views.generic import TemplateView,ListView,DetailView,DeleteView
+from django.views.generic import TemplateView,ListView,DetailView,DeleteView,CreateView
 from .models import Profile,Tweet
-from .forms import TweetForm
+from .forms import TweetForm,SignupForm
 from django.urls import reverse_lazy 
 # Class Based Views
 
@@ -50,7 +51,15 @@ class DeleteTweetView(TemplateView):
             return redirect('home')
         else:
             return render(request,self.template_name)
-    
+
+
+class RegisterView(CreateView):
+    model=User
+    form_class = SignupForm
+    template_name = 'registration/register.html'
+    success_url = reverse_lazy('login')
+
+
 class LoginView(TemplateView):
     template_name='registration/login.html'
 
