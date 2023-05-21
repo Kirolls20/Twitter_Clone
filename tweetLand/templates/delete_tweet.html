@@ -1,0 +1,18 @@
+{% include 'base.html' %}
+
+
+{% block content %}
+    <div class="col-md-6 offset-md-4">
+        <h2>Delete This Tweet</h2>
+        <h4>Are you sure</h4>
+        <form  action="#" method="post">
+            {% csrf_token %}
+            <!-- Form fields and other elements -->
+            <button type="submit" class="btn btn-danger">Delete</button>
+            </form>    
+    </div>
+
+       
+            
+
+{% endblock %}

@@ -7,7 +7,7 @@ from django.contrib.auth.views import LogoutView
 from django.contrib import messages
 from django.http import HttpResponse 
 from django.views import View
-from django.views.generic import TemplateView,ListView,DetailView,DeleteView,CreateView
+from django.views.generic import TemplateView,ListView,DetailView,DeleteView,CreateView,UpdateView
 from .models import Profile,Tweet
 from .forms import TweetForm,SignupForm
 from django.urls import reverse_lazy 
@@ -39,7 +39,7 @@ class HomeView(ListView):
                 messages.success(request,('Tweet Sent!'))
                 return redirect('home')
 
-class DeleteTweetView(TemplateView):
+class DeleteTweetView(LoginRequiredMixin, TemplateView):
     template_name='home.html'       
     
     def post(self,request,**kwargs):
@@ -51,6 +51,11 @@ class DeleteTweetView(TemplateView):
             return redirect('home')
         else:
             return render(request,self.template_name)
+
+
+
+class UpdateTweetView(LoginRequiredMixin,UpdateView):
+    template_name='update_tweet.html'
 
 
 class RegisterView(CreateView):

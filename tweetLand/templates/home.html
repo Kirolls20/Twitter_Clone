@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding Tweet</title>
     <link rel="stylesheet" href="{% static 'css/add_tweet.css' %}">
+  
 </head>
 
 {% block content %}
@@ -35,24 +36,41 @@
         </div>
     </div>
 </div>
+    <!-- Looping thru all the tweets  -->
 {% if  tweets %}
     {% for tweet in tweets %}
-            <div class="card">
-    <div class="card-header">
-       <a href="{% url 'profile' tweet.user.id %}"> by @{{tweet.user|lower}}</a>
+    <div class="card" style="border:0; padding:none;">
+        <div class="card-header">
+            <a href="{% url 'profile' tweet.user.id %}" style="color:rgb(58, 58, 240)"> by @{{tweet.user|lower}}</a>
+            <small class="text-muted">{{tweet.updated_at}}</small>
+        </div>
+      <!-- Drop down options -->
+       <div class="dropdown">
+            <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="float:right; border:0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                </svg>
+            </button>
+        <ul class="dropdown-menu">
+            {% if tweet.user == request.user %}
+                <li><a class="dropdown-item" href="">Edit</a></li>
+                <!-- Delete Form  -->
+                <form  action="{%  url 'delete_tweet' tweet.id %}" method="post" onsubmit=" return  ConfirmSubmition()">
+                    {% csrf_token %}
+            
+                    <button type="submit" class="dropdown-item">Delete</button>
+                </form> 
+            {% endif %}
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+        </div>
     </div>
-    <div class="card-body">
-        <h4 class="text-muted">{{tweet.tweet}}</h4>
-        <small class="text-muted">{{tweet.updated_at}}</small>
-        {% if tweet.user == request.user %}
-        <form action="{% url 'delete_tweet' tweet.id %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-danger">Delete Me</button>
-        </form> 
-        {% endif %}
+    <!-- The Body Of the Tweet -->
+    <div class="card-body" style="border-radius: 5px; border:#b3a8a8 8px;">
+        <h5 class="text-muted" style="padding:4px;">{{tweet.tweet}}</h5>     
     </div> 
-    </div><br>  
-    {% endfor %}
+</div><br>  
+{% endfor %}
 {% endif %}
 {% endblock %}
 
@@ -64,6 +82,10 @@
     document.getElementById('closePopup').addEventListener('click', function() {
     document.querySelector('.pop-up').style.display = 'none';
     });
+    function ConfirmSubmition(){
+        var onConfirm = confirm('Are You Sure you Want to Delete this Tweet?')
+        return onConfirm;
+    }
 </script>
 
 </body>
