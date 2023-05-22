@@ -17,7 +17,6 @@
     <div class="width:100px;">
         <button class="btn btn-secondary" id="showPopup">Add Tweet</button>
         <!-- PopUP Contianer -->
-
         <div class="container">
             <div class="pop-up" id="popup">
                 <h2 style="text-align: center;">Make A tweet!</h2>
@@ -36,7 +35,7 @@
         </div>
     </div>
 </div>
-    <!-- Looping thru all the tweets  -->
+<!-- Looping thru all the tweets  -->
 {% if  tweets %}
     {% for tweet in tweets %}
     <div class="card" style="border:0; padding:none;">
@@ -53,7 +52,8 @@
             </button>
         <ul class="dropdown-menu">
             {% if tweet.user == request.user %}
-                <li><a class="dropdown-item" href="">Edit</a></li>
+                <!-- Edit Form --> 
+                <li><a class="dropdown-item" href="{% url 'edit_tweet' tweet.id %}">Edit</a></li>
                 <!-- Delete Form  -->
                 <form  action="{%  url 'delete_tweet' tweet.id %}" method="post" onsubmit=" return  ConfirmSubmition()">
                     {% csrf_token %}
@@ -61,15 +61,34 @@
                     <button type="submit" class="dropdown-item">Delete</button>
                 </form> 
             {% endif %}
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" href="#">Save for later</a></li>
         </ul>
         </div>
     </div>
     <!-- The Body Of the Tweet -->
     <div class="card-body" style="border-radius: 5px; border:#b3a8a8 8px;">
         <h5 class="text-muted" style="padding:4px;">{{tweet.tweet}}</h5>     
+    
     </div> 
 </div><br>  
+
+<!-- Edit popUp form  -->
+<!-- <div class="container">
+    <div class="pop-up" id="popup">
+        <h2 style="text-align: center;">Edit The Tweet<h2>
+        <form  action="{% url 'edit_tweet' tweet.id %}" method="post">
+            {% csrf_token %}
+            <div style="justify-content: center;">
+                {{tweet_form}}
+            </div>
+
+            <div class="btns-container">
+                <button type="submit" class="popup-btns">Update It </button>
+                <button id="closePopup" type="button" class="popup-btns">Cancel</button>
+            </div>    
+        </form>
+    </div>
+</div> -->
 {% endfor %}
 {% endif %}
 {% endblock %}

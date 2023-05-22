@@ -52,10 +52,23 @@ class DeleteTweetView(LoginRequiredMixin, TemplateView):
         else:
             return render(request,self.template_name)
 
+class EditTweetView(LoginRequiredMixin,UpdateView):
+    template_name= 'update_tweet.html'
+    model= Tweet
+    form_class =TweetForm
+    success_url = reverse_lazy('home')
+    
+    # def get_context_data(self, **kwargs):
+    #     context =  super().get_context_data(**kwargs)
+    #     context['tweets'] = Tweet.objects.all().order_by('-updated_at')
+    #     context['tweet_form'] = TweetForm()
+    #     return context
+    
+    # def post(self,request,**kwargs):
+    #     pass
 
 
-class UpdateTweetView(LoginRequiredMixin,UpdateView):
-    template_name='update_tweet.html'
+
 
 
 class RegisterView(CreateView):
