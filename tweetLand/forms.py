@@ -1,8 +1,8 @@
 from typing import Any
 from django import forms
-from .models import Tweet
+from .models import Tweet,User
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
 
 class TweetForm(forms.ModelForm):
@@ -74,6 +74,50 @@ class SignupForm(UserCreationForm):
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password'
         self.fields['password2'].label = ''
 
-                              
-                              
-                    
+
+
+
+
+class UpdateUserProfileForm(forms.ModelForm):
+    first_name = forms.CharField( 
+        required=True,
+        max_length=120,
+        widget= forms.widgets.TextInput(
+                attrs={
+                        'class':'form-control',
+                        'placeholder': 'First Name'
+                        }
+                    ) ,
+        label= ''
+                                
+            )
+    bio= forms.CharField(required=False,
+        widget= forms.widgets.Textarea(
+            attrs={
+                'Placeholder':" Type Something...",
+                'class': 'form-control',
+            }
+           
+        ),
+        label= ''
+
+    )
+    last_name=forms.CharField( 
+        required=True,
+        max_length=120,
+        widget= forms.widgets.TextInput(
+                attrs={
+                        'class':'form-control',
+                        'placeholder': 'Last Name'
+                        }
+                    ) ,
+        label= ''
+    )
+    class Meta:
+        model= User
+        fields= ['username','first_name','last_name','bio']
+
+    def __init__(self, *args: Any, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['class'] = 'form-control'
+        self.fields['username'].label= ''

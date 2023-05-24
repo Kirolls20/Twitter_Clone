@@ -1,15 +1,15 @@
 from typing import Any, Dict
 from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.views import LogoutView
 from django.contrib import messages
 from django.http import HttpResponse 
 from django.views import View
 from django.views.generic import TemplateView,ListView,DetailView,DeleteView,CreateView,UpdateView
-from .models import Profile,Tweet
-from .forms import TweetForm,SignupForm
+from .models import Tweet,User
+from .forms import TweetForm,SignupForm,UpdateUserProfileForm
 from django.urls import reverse_lazy 
 # Class Based Views
 
@@ -67,9 +67,43 @@ class EditTweetView(LoginRequiredMixin,UpdateView):
     # def post(self,request,**kwargs):
     #     pass
 
+class ListUSersView(LoginRequiredMixin,ListView):
+    model= User
+    context_object_name = 'users'
+    template_name = 'user_list.html'
+
+    def get_context_data(self, **kwargs) :
+        context = super().get_context_data(**kwargs)
+        context['users'] =  User.objects.exclude(id=self.request.user.id)
+        return context
+    
+class ProfileView(LoginRequiredMixin,DetailView):
+    model = User
+    context_object_name ='profile'
+    template_name= 'profile.html'
+
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        context['profile'] = User.objects.get(id=self.kwargs['pk'])
+        context['tweets']  = Tweet.objects.filter(id=self.kwargs['pk'])
+        return context
+
+    # Follow and unfollow Function
+    def post(self,request,pk):
+        profile = User.objects.get(id=pk)
+        if request.method == 'POST':
+            current_user_profile = self.request.user
+            action = request.POST['follow']
+            if action == 'unfollow':
+                current_user_profile.follows.remove(profile)
+            elif action == 'follow':
+                current_user_profile.follows.add(profile)
+
+        return render(request,  self.template_name , {'profile':profile})
 
 
 
+# User Classes and Functions
 
 class RegisterView(CreateView):
     model=User
@@ -101,40 +135,27 @@ class LogoutView(View):
         return redirect('login')
 
 
-    
-class ListUSersView(LoginRequiredMixin,ListView):
-    model= Profile
-    context_object_name = 'users'
-    template_name = 'user_list.html'
+class UpdateUserProfileView(LoginRequiredMixin,UpdateView):
+    template_name = 'registration/update_user.html'
+    model=User
+    form_class= UpdateUserProfileForm
 
-    def get_context_data(self, **kwargs) :
-        context = super().get_context_data(**kwargs)
-        context['users'] =  Profile.objects.exclude(user=self.request.user)
-        return context
-    
-class ProfileView(LoginRequiredMixin,DetailView):
-    model = Profile
-    context_object_name ='profile'
-    template_name= 'profile.html'
-
-    def get_context_data(self, **kwargs):
-        context= super().get_context_data(**kwargs)
-        context['profile'] = Profile.objects.get(id=self.kwargs['pk'])
-        context['tweets']  = Tweet.objects.filter(user_id=self.kwargs['pk'])
-        return context
-
-    # Follow and unfollow Function
-    def post(self,request,pk):
-        profile = Profile.objects.get(user_id=pk)
+    def post(self,request,**kwargs):
+        pk = self.kwargs['pk']
+        current_user= User.objects.get(id=pk)
         if request.method == 'POST':
-            current_user_profile = self.request.user.profile
-            action = request.POST['follow']
-            if action == 'unfollow':
-                current_user_profile.follows.remove(profile)
-            elif action == 'follow':
-                current_user_profile.follows.add(profile)
+            form = UpdateUserProfileForm(request.POST or None , instance = request.user)
+            if form.is_valid():
+                form.save()
+                messages.success(request,('The Profile has been updated Successfully!'))
+                return redirect('home')
+            
+        
+            
 
-        return render(request,  self.template_name , {'profile':profile})
+    
+
+    
 
 
     

@@ -1,0 +1,14 @@
+{% include 'base.html' %}
+
+{% block content %}
+<div class="col-md-6 offset-md-4" style="padding:10px;">
+<h2>Update Your Profile</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" class="btn btn-info">Update</button>
+</form>
+
+</div>
+
+{% endblock %}
