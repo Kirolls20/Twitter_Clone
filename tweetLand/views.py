@@ -85,11 +85,12 @@ class ProfileView(LoginRequiredMixin,DetailView):
     def get_context_data(self, **kwargs):
         context= super().get_context_data(**kwargs)
         context['profile'] = User.objects.get(id=self.kwargs['pk'])
-        context['tweets']  = Tweet.objects.filter(id=self.kwargs['pk'])
+        context['tweets']  = Tweet.objects.filter(user=self.kwargs['pk']) ## HERE A PROBLEM ###
         return context
 
     # Follow and unfollow Function
     def post(self,request,pk):
+        tweets = Tweet.objects.filter(user=self.kwargs['pk'])
         profile = User.objects.get(id=pk)
         if request.method == 'POST':
             current_user_profile = self.request.user
@@ -99,7 +100,7 @@ class ProfileView(LoginRequiredMixin,DetailView):
             elif action == 'follow':
                 current_user_profile.follows.add(profile)
 
-        return render(request,  self.template_name , {'profile':profile})
+        return render(request,  self.template_name , {'profile':profile,'tweets':tweets})
 
 
 

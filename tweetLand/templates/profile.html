@@ -71,7 +71,7 @@
                 </div>
               </div>
               
-              <form action="#" method="post">
+              <form action="{% url 'profile' profile.id %}" method="post">
                 {% csrf_token %}
                 {% if profile in user.follows.all %}
                    <button class="btn btn-outline-danger" name="follow" value="unfollow">UnFollow @{{profile.username}}</button>
