@@ -13,7 +13,7 @@ class User(AbstractUser):
     follows= models.ManyToManyField("self", related_name='followed_by',
             symmetrical=False,      
             blank=True)
-    
+    profile_pic = models.ImageField(null=True,blank=True,upload_to='images/')
     date_created = models.DateField(auto_now_add=True)
     date_modified= models.DateTimeField(auto_now=True)
     

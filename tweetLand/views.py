@@ -145,7 +145,7 @@ class UpdateUserProfileView(LoginRequiredMixin,UpdateView):
         pk = self.kwargs['pk']
         current_user= User.objects.get(id=pk)
         if request.method == 'POST':
-            form = UpdateUserProfileForm(request.POST or None , instance = request.user)
+            form = UpdateUserProfileForm(request.POST ,request.FILES , instance = request.user)
             if form.is_valid():
                 form.save()
                 messages.success(request,('The Profile has been updated Successfully!'))

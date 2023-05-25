@@ -112,10 +112,11 @@ class UpdateUserProfileForm(forms.ModelForm):
                         }
                     ) ,
         label= ''
+    
     )
     class Meta:
         model= User
-        fields= ['username','first_name','last_name','bio']
+        fields= ['username','first_name','last_name','bio','profile_pic']
 
     def __init__(self, *args: Any, **kwargs):
         super().__init__(*args, **kwargs)

@@ -4,18 +4,19 @@
 
 <br>
 {% if profile %}
+<!-- Profile image and Tweets  -->
 <div class="container text-center">
     <div class="row">
         <div class="col-8">
-                <img src="{% static 'images/default_profile_pic.jpg'%}" class="img-fluid rounded-start" alt="Profile picture">
+               
             <h2>{{profile.username}} Profile</h2>
             {% if tweets %}
+            <small>{{tweets.count}} Tweets</small><br>
             <small>{{profile.bio}}</small>
-                <small>{{tweets.count}} Tweets</small>
                 {% for tweet in tweets.all %}
                 <div class="card">
                     <div  style="float: right; padding:10px;">
-                        <!-- Edit Button -->
+                    <!-- Edit Button -->
                     <a href="{% url 'edit_tweet' tweet.id %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -33,33 +34,28 @@
                         </button>
                     </form> 
                 </div>
-                    
-                    <!-- <div class="card-header">
-                       <a href="{% url 'profile' tweet.user.id %}"> by @{{tweet.user|lower}}</a>
-                    </div> -->
                     <div class="card-body">
                         <h4 class="text-muted">{{tweet.tweet}}</h4>
                         
                         <small class="text-muted">{{tweet.updated_at}}</small>
-                        <!-- {% if tweet.user == request.user %}
-                        <form action="{% url 'delete_tweet' tweet.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger">Delete Me</button>
-                        </form> 
-                        {% endif %}  -->
                     </div>
                     </div><br>  
                 {% endfor %}
             {% endif %}
         </div>
-        <div class="col-4">
+        <!-- Follows and followed by  -->
+        <div class="col-4" >
+            {% if profile.profile_pic %}
+            <img src="{{profile.profile_pic.url}}"  alt="Profile picture" style="padding:10px; border-radius: 50%;" width="300" height="300" >
+            {% else %}
+                <img src="{% static 'images/default_profile_pic.jpg'%}"  alt="Profile picture" style="padding:10px; border-radius: 50%;">
+            {% endif %}
             <div class="card border-success mb-3" style="max-width: 18rem;">
                 <div class="card-header bg-transparent border-success">{{profile.follows.count}} Follows You </div>
                 <div class="card-body text-success">
                     {% for follow in profile.follows.all %} 
                         <a href="{% url 'profile' follow.id %}"> @{{follow|lower}}</a><br>     
-                    {% endfor %}
-                  
+                    {% endfor %} 
                 </div>
               </div>
               <div class="card border-success mb-3" style="max-width: 18rem;">

@@ -114,6 +114,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# Set Media configuration for uploading images 
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
 AUTH_USER_MODEL  = 'tweetLand.User'  
 # Login Logout Redirect Url
 LOGIN_REDIRECT_URL = reverse_lazy('home')
