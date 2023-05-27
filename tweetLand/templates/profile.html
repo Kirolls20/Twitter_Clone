@@ -11,8 +11,7 @@
                
             <h2>{{profile.username}} Profile</h2>
             {% if tweets %}
-            <small>{{tweets.count}} Tweets</small><br>
-            <small>{{profile.bio}}</small>
+            
                 {% for tweet in tweets.all %}
                 <div class="card">
                     <div  style="float: right; padding:10px;">
@@ -47,8 +46,14 @@
         <div class="col-4" >
             {% if profile.profile_pic %}
             <img src="{{profile.profile_pic.url}}"  alt="Profile picture" style="padding:10px; border-radius: 50%;" width="300" height="300" >
+            <br>
+            <small>{{tweets.count}} Tweets</small><br>
+            <small>{{profile.bio}}</small>
             {% else %}
                 <img src="{% static 'images/default_profile_pic.jpg'%}"  alt="Profile picture" style="padding:10px; border-radius: 50%;">
+                <br>
+                <small>{{tweets.count}} Tweets</small><br>
+                <small>{{profile.bio}}</small>
             {% endif %}
             <div class="card border-success mb-3" style="max-width: 18rem;">
                 <div class="card-header bg-transparent border-success">{{profile.follows.count}} Follows You </div>

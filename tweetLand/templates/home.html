@@ -38,7 +38,7 @@
 <!-- Looping thru all the tweets  -->
 {% if  tweets %}
     {% for tweet in tweets %}
-    <div class="card" style="border:0; padding:none;">
+    <div class="card text-bg-dark mb-3" style="border:0; padding:none;max-width: 50rem; text-align: center; margin:auto;">
         <div class="card-header">
             <a href="{% url 'profile' tweet.user.id %}" style="color:rgb(58, 58, 240)"> by @{{tweet.user|lower}}</a>
             <small class="text-muted">{{tweet.updated_at}}</small>
@@ -66,7 +66,7 @@
         </div>
     </div>
     <!-- The Body Of the Tweet -->
-    <div class="card-body" style="border-radius: 5px; border:#b3a8a8 8px;">
+    <div class="card text-bg-dark mb-3" style="border-radius: 5px; border:#b3a8a8 8px; text-align: center;">
         <h5 class="text-muted" style="padding:4px;">{{tweet.tweet}}</h5>     
     
     </div> 
