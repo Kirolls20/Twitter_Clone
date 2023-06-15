@@ -22,21 +22,20 @@ class User(AbstractUser):
 class Tweet(models.Model):
     user = models.ForeignKey(User,related_name='tweets' ,on_delete=models.DO_NOTHING)
     tweet = models.CharField(max_length=200,blank=False)
+    likes = models.ManyToManyField(User,related_name='tweet_like',blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def total_likes(self):
+        return self.likes.count()
 
     def __str__(self):
         return f'{self.user.username}  {self.created_at} '
 
 
-# # Create your models here.
-# class Profile(models.Model):
-#     
-    
-    
-    # def __str__(self):
-    #     return self.user.username
-    
+
+
+
 
 # def create_profile(sender,instance,created,**kwargs):
 #     if created:

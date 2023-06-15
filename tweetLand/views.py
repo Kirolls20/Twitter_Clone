@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
@@ -85,7 +85,7 @@ class ProfileView(LoginRequiredMixin,DetailView):
     def get_context_data(self, **kwargs):
         context= super().get_context_data(**kwargs)
         context['profile'] = User.objects.get(id=self.kwargs['pk'])
-        context['tweets']  = Tweet.objects.filter(user=self.kwargs['pk']) ## HERE A PROBLEM ###
+        context['tweets']  = Tweet.objects.filter(user=self.kwargs['pk']).order_by('-updated_at') ## HERE A PROBLEM ###
         return context
 
     # Follow and unfollow Function
@@ -102,7 +102,32 @@ class ProfileView(LoginRequiredMixin,DetailView):
 
         return render(request,  self.template_name , {'profile':profile,'tweets':tweets})
 
+# class LikeTweetView(LoginRequiredMixin,TemplateView):
+#     template_name= 'home.html'
 
+#     def post(self,request,pk):
+#         tweets = Tweet.objects.all().order_by('-updated_at')
+#         tweet = get_object_or_404(Tweet,id=pk)
+#         if tweet.likes.filter(id=request.user.id):
+#             tweet.likes.remove(request.user)
+
+#         else:
+#             tweet.likes.add(request.user)
+        
+            
+def like_Tweet(request,pk):
+    if request.user.is_authenticated:
+        tweet = get_object_or_404(Tweet,id=pk)
+        if tweet.likes.filter(id=request.user.id):
+            tweet.likes.remove(request.user)
+        else:
+            tweet.likes.add(request.user)
+        return redirect('home')
+    else:
+        messages.success(request,('You logged in Successfully!'))
+        return redirect('home')
+       
+    
 
 # User Classes and Functions
 
