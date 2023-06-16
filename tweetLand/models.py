@@ -16,13 +16,15 @@ class User(AbstractUser):
     profile_pic = models.ImageField(null=True,blank=True,upload_to='images/')
     date_created = models.DateField(auto_now_add=True)
     date_modified= models.DateTimeField(auto_now=True)
-    
+
+
 
 
 class Tweet(models.Model):
     user = models.ForeignKey(User,related_name='tweets' ,on_delete=models.DO_NOTHING)
     tweet = models.CharField(max_length=200,blank=False)
     likes = models.ManyToManyField(User,related_name='tweet_like',blank=True)
+    comments= models.ManyToManyField(User,related_name='tweet_comment',through='Comment')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -31,8 +33,13 @@ class Tweet(models.Model):
 
     def __str__(self):
         return f'{self.user.username}  {self.created_at} '
+    
 
-
+class Comment(models.Model):
+    comment = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 

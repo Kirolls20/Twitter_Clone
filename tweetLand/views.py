@@ -114,7 +114,10 @@ class ProfileView(LoginRequiredMixin,DetailView):
 #         else:
 #             tweet.likes.add(request.user)
         
-            
+class CreateCommentView(LoginRequiredMixin,CreateView):
+    template_name = 'home.html'
+    
+
 def like_Tweet(request,pk):
     if request.user.is_authenticated:
         tweet = get_object_or_404(Tweet,id=pk)

@@ -1,6 +1,6 @@
 from typing import Any
 from django import forms
-from .models import Tweet,User
+from .models import Tweet,User,Comment
 from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.models import User
 
@@ -20,6 +20,20 @@ class TweetForm(forms.ModelForm):
     class Meta:
         model = Tweet
         exclude= ['user','likes']
+
+
+
+
+class CommentForm(forms.ModelForm):
+    comment = forms.CharField(required=True,widget= forms.widgets.Textarea(
+        attrs= {
+            'Placeholder':" Comment Here ",
+                'class': 'form-control',
+        }
+    ))
+    class Meta:
+        model= Comment
+        exclude = ['user']
 
 class SignupForm(UserCreationForm):
     first_name = forms.CharField( 
