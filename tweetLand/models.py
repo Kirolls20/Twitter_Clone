@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from tweetLand.models import User
 
-# Create Tweet Model a
+
 
 class User(AbstractUser):
     # profile_user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
@@ -33,6 +33,9 @@ class Tweet(models.Model):
 
     def __str__(self):
         return f'{self.user.username}  {self.created_at} '
+    
+    def total_comments(self):
+        return self.comments.count()
     
 
 class Comment(models.Model):

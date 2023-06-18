@@ -1,0 +1,35 @@
+.container{ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+}
+.comment-popUpp{
+    width:400px;
+    height:350px;
+    background:#c3c5d6;
+    border-radius: 6px;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%) ;
+    display: none;
+    z-index: 1; 
+    padding:10px;
+
+}
+
+
+.comment-popup-btns{
+    
+    bottom:200px;
+    width:100%;
+    border:0;
+    margin:10px;
+    padding:10px;
+    border-radius: 5px;
+    
+
+
+}

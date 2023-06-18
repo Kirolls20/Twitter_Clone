@@ -1,0 +1,12 @@
+{% include 'base.html' %}
+
+
+{% block content %}
+<div>
+    <h1>Comments for  </h1>
+    {% for comment in comments %}
+        {{comment.user}} - {{comment.comment}}<br>
+    {% endfor %}
+</div>
+
+{% endblock %}

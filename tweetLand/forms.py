@@ -9,7 +9,7 @@ class TweetForm(forms.ModelForm):
     tweet= forms.CharField(required=True,
         widget= forms.widgets.Textarea(
             attrs={
-                'Placeholder':" Type Something...",
+                'Placeholder':" What's happening?...",
                 'class': 'form-control',
             }
            
@@ -19,7 +19,7 @@ class TweetForm(forms.ModelForm):
     )
     class Meta:
         model = Tweet
-        exclude= ['user','likes']
+        exclude= ['user','likes','comments']
 
 
 
@@ -27,13 +27,13 @@ class TweetForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     comment = forms.CharField(required=True,widget= forms.widgets.Textarea(
         attrs= {
-            'Placeholder':" Comment Here ",
+            'Placeholder':" Leave A Comment... ",
                 'class': 'form-control',
         }
     ))
     class Meta:
         model= Comment
-        exclude = ['user']
+        exclude = ['user','tweet']
 
 class SignupForm(UserCreationForm):
     first_name = forms.CharField( 

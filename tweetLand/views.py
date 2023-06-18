@@ -8,8 +8,8 @@ from django.contrib import messages
 from django.http import HttpResponse 
 from django.views import View
 from django.views.generic import TemplateView,ListView,DetailView,DeleteView,CreateView,UpdateView
-from .models import Tweet,User
-from .forms import TweetForm,SignupForm,UpdateUserProfileForm
+from .models import Tweet,User,Comment
+from .forms import TweetForm,SignupForm,UpdateUserProfileForm,CommentForm
 from django.urls import reverse_lazy 
 # Class Based Views
 
@@ -114,9 +114,21 @@ class ProfileView(LoginRequiredMixin,DetailView):
 #         else:
 #             tweet.likes.add(request.user)
         
-class CreateCommentView(LoginRequiredMixin,CreateView):
-    template_name = 'home.html'
+# class CreateCommentView(LoginRequiredMixin,CreateView):
+#     template_name = 'home.html'
+#     model= Comment
+#     form_class = CommentForm
+#     success_url = redirect('home')
+
+class CommentsView(LoginRequiredMixin,TemplateView):
+    template_name= 'comment_list.html'
     
+    def get_context_data(self, **kwargs) :
+        context=  super().get_context_data(**kwargs)
+        tweet_id = Tweet.objects.get(id=self.kwargs['pk'])
+        context['comments'] = Comment.objects.filter(tweet=tweet_id)
+        return context
+
 
 def like_Tweet(request,pk):
     if request.user.is_authenticated:
@@ -127,10 +139,28 @@ def like_Tweet(request,pk):
             tweet.likes.add(request.user)
         return redirect('home')
     else:
-        messages.success(request,('You logged in Successfully!'))
+        messages.warning(request,('You Should Log in First !!'))
         return redirect('home')
        
-    
+def comment_view(request,pk):
+    if request.user.is_authenticated:
+        tweet_id = get_object_or_404(Tweet,id=pk)
+        comment_form = CommentForm()
+        if request.method == 'POST':
+            if request.POST['comment']:
+                comment_form = CommentForm(request.POST)
+                if comment_form.is_valid():
+                    new_form = comment_form.save(commit=False)
+                    new_form.user = request.user
+                    new_form.tweet = tweet_id
+                    new_form.save()
+                    redirect('home')
+    else:
+        messages.warning(request,('You Should Log in First !!'))
+        return redirect('home')
+    return render(request,'home.html',{'comment_form':comment_form})
+
+
 
 # User Classes and Functions
 
