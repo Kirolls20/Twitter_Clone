@@ -29,6 +29,8 @@ class CommentForm(forms.ModelForm):
         attrs= {
             'Placeholder':" Leave A Comment... ",
                 'class': 'form-control',
+                'rows':1,
+                'label':'',
         }
     ))
     class Meta:
@@ -43,6 +45,7 @@ class SignupForm(UserCreationForm):
                 attrs={
                         'class':'form-control',
                         'placeholder': 'First Name'
+                        
                         }
                     ) ,
         label= ''

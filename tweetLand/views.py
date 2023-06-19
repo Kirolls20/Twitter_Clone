@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from django.urls import reverse
 from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.models import User
@@ -102,32 +103,30 @@ class ProfileView(LoginRequiredMixin,DetailView):
 
         return render(request,  self.template_name , {'profile':profile,'tweets':tweets})
 
-# class LikeTweetView(LoginRequiredMixin,TemplateView):
-#     template_name= 'home.html'
-
-#     def post(self,request,pk):
-#         tweets = Tweet.objects.all().order_by('-updated_at')
-#         tweet = get_object_or_404(Tweet,id=pk)
-#         if tweet.likes.filter(id=request.user.id):
-#             tweet.likes.remove(request.user)
-
-#         else:
-#             tweet.likes.add(request.user)
-        
-# class CreateCommentView(LoginRequiredMixin,CreateView):
-#     template_name = 'home.html'
-#     model= Comment
-#     form_class = CommentForm
-#     success_url = redirect('home')
 
 class CommentsView(LoginRequiredMixin,TemplateView):
     template_name= 'comment_list.html'
     
     def get_context_data(self, **kwargs) :
         context=  super().get_context_data(**kwargs)
-        tweet_id = Tweet.objects.get(id=self.kwargs['pk'])
-        context['comments'] = Comment.objects.filter(tweet=tweet_id)
+        tweet_id = get_object_or_404(Tweet,id=self.kwargs['pk'])
+        context['tweet_id'] = tweet_id
+        context['comments'] = Comment.objects.filter(tweet= tweet_id)
+        context['comment_form'] = CommentForm()
         return context
+    
+    def post(self,request,pk):
+        tweet_id = get_object_or_404(Tweet,id=pk)
+        comment_form = CommentForm(request.POST)            
+        if comment_form.is_valid():
+            new_form = comment_form.save(commit=False)
+            new_form.user = request.user
+            new_form.tweet = tweet_id
+            new_form.save()
+            return redirect(reverse('comments_list', kwargs={'pk': pk}))
+        else:
+            messages.warning(request,('You Should Log in First !!'))
+            return redirect('home')
 
 
 def like_Tweet(request,pk):
@@ -142,23 +141,23 @@ def like_Tweet(request,pk):
         messages.warning(request,('You Should Log in First !!'))
         return redirect('home')
        
-def comment_view(request,pk):
-    if request.user.is_authenticated:
-        tweet_id = get_object_or_404(Tweet,id=pk)
-        comment_form = CommentForm()
-        if request.method == 'POST':
-            if request.POST['comment']:
-                comment_form = CommentForm(request.POST)
-                if comment_form.is_valid():
-                    new_form = comment_form.save(commit=False)
-                    new_form.user = request.user
-                    new_form.tweet = tweet_id
-                    new_form.save()
-                    redirect('home')
-    else:
-        messages.warning(request,('You Should Log in First !!'))
-        return redirect('home')
-    return render(request,'home.html',{'comment_form':comment_form})
+# def comment_view(request,pk):
+#     if request.user.is_authenticated:
+#         tweet_id = get_object_or_404(Tweet,id=pk)
+#         comment_form = CommentForm()
+#         if request.method == 'POST':
+#             if request.POST['comment']:
+#                 comment_form = CommentForm(request.POST)
+#                 if comment_form.is_valid():
+#                     new_form = comment_form.save(commit=False)
+#                     new_form.user = request.user
+#                     new_form.tweet = tweet_id
+#                     new_form.save()
+#                     redirect('home')
+#     else:
+#         messages.warning(request,('You Should Log in First !!'))
+#         return redirect('home')
+#     return render(request,'comment_list.html',{'comment_form':comment_form})
 
 
 
@@ -209,13 +208,3 @@ class UpdateUserProfileView(LoginRequiredMixin,UpdateView):
                 messages.success(request,('The Profile has been updated Successfully!'))
                 return redirect('home')
             
-        
-            
-
-    
-
-    
-
-
-    
-

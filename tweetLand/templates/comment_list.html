@@ -2,11 +2,29 @@
 
 
 {% block content %}
-<div>
-    <h1>Comments for  </h1>
-    {% for comment in comments %}
-        {{comment.user}} - {{comment.comment}}<br>
-    {% endfor %}
-</div>
+<form action="{% url 'comments_list' tweet_id.id %}" method="post">
+    {% csrf_token %}
+    <div style="justify-content: center;">
+        {{comment_form}}
+    </div><br>
+    <button type="submit" class="btn btn-outline-info" >Send Comment</button>
+
+    <br>
+    <hr>
+    {% if comments %}
+        {% for comment in comments %}
+            <div class="card" style="width: 25rem; margin:5px;">
+                <ul class="list-group list-group-flush">
+
+                <li class="list-group-item"><a href="{% url 'profile' comment.user.id %}" style="text-decoration: none;">@ {{comment.user|lower}}</a> - {{comment.comment}}</li>
+                </ul>
+                
+            </div>
+        {% endfor %}
+    {% else %}
+    <h4>No Comments in this Tweet </h4>
+    {% endif %}
+
+
 
 {% endblock %}
