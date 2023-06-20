@@ -40,9 +40,11 @@ class Tweet(models.Model):
 
 class Comment(models.Model):
     comment = models.TextField()
+    likes = models.ManyToManyField(User,related_name='comment_likes',blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 

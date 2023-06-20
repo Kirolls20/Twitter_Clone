@@ -15,4 +15,5 @@ urlpatterns = [
     path('like/<int:pk>',views.like_Tweet,name='like_tweet'),
     # path('comment/<int:pk>',views.comment_view,name='tweet_comment'),
     path('comment/list/<int:pk>',views.CommentsView.as_view(),name='comments_list'),
+    path('likes-for/tweet/<int:pk>',views.LikesView.as_view(),name='likes_page'),
 ]   

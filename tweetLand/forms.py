@@ -35,7 +35,7 @@ class CommentForm(forms.ModelForm):
     ))
     class Meta:
         model= Comment
-        exclude = ['user','tweet']
+        exclude = ['user','tweet','likes']
 
 class SignupForm(UserCreationForm):
     first_name = forms.CharField( 

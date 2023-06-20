@@ -111,7 +111,8 @@ class CommentsView(LoginRequiredMixin,TemplateView):
         context=  super().get_context_data(**kwargs)
         tweet_id = get_object_or_404(Tweet,id=self.kwargs['pk'])
         context['tweet_id'] = tweet_id
-        context['comments'] = Comment.objects.filter(tweet= tweet_id)
+        context['total_comments'] = tweet_id.total_comments
+        context['comments'] = Comment.objects.filter(tweet= tweet_id).order_by('-updated_at')
         context['comment_form'] = CommentForm()
         return context
     
@@ -128,7 +129,16 @@ class CommentsView(LoginRequiredMixin,TemplateView):
             messages.warning(request,('You Should Log in First !!'))
             return redirect('home')
 
+class LikesView(LoginRequiredMixin,TemplateView):
+    template_name= 'likes_page.html'
 
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        tweet_id= get_object_or_404(Tweet,id=self.kwargs['pk'])
+        like_list = tweet_id.likes.all()
+        context['likes'] = like_list
+        return context
+    
 def like_Tweet(request,pk):
     if request.user.is_authenticated:
         tweet = get_object_or_404(Tweet,id=pk)

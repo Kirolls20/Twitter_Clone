@@ -1,0 +1,19 @@
+{% include 'base.html' %}
+
+{% block content %}
+<center>
+  <div style="text-align: center; display: inline-block; margin:10px;">
+    <div class="list-group">
+      <a href="#" class="list-group-item list-group-item-action active" aria-current="true"  style="width: 20rem;">
+        <h4>Likes</h4>
+      </a>
+      {% for like in likes %}
+            <a class="list-group-item list-group-item-action disabled" style="width: 20rem;">{{like}}</a>
+      
+      {% endfor %}
+    </div>
+  </div>
+  
+</center>
+
+{% endblock %}

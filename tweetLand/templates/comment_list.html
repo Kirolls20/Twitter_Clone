@@ -1,6 +1,6 @@
 {% include 'base.html' %}
 
-
+{% load static %}
 {% block content %}
 <form action="{% url 'comments_list' tweet_id.id %}" method="post">
     {% csrf_token %}
@@ -12,19 +12,28 @@
     <br>
     <hr>
     {% if comments %}
+    <div class="list-group">
+        <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+           <h4>{{total_comments}} Comments</h4>
+        </button>
         {% for comment in comments %}
-            <div class="card" style="width: 25rem; margin:5px;">
-                <ul class="list-group list-group-flush">
-
-                <li class="list-group-item"><a href="{% url 'profile' comment.user.id %}" style="text-decoration: none;">@ {{comment.user|lower}}</a> - {{comment.comment}}</li>
-                </ul>
+                <button type="button" class="list-group-item list-group-item-action" disabled>
+                    {% if comment.user.profile_pic %}
+                    <img src="{{comment.user.profile_pic.url }}" alt="" class="rounded-circle" width=30 height=30 >
+                    {% else %}
+                    <img src="{% static 'images/default_profile_pic.jpg' %}" alt="Profile pic" class="rounded-circle" width=30 height=30 >
+                    {% endif %}
+                    <a href="{% url 'profile' comment.user.id %}" style="text-decoration: none;">@ {{comment.user|lower}}</a> - {{comment.comment}}
+                    <small class="text-muted" style="padding:10px;">{{comment.updated_at|timesince }} ago</small>
                 
-            </div>
+                </button>
+
         {% endfor %}
+        </div>
     {% else %}
     <h4>No Comments in this Tweet </h4>
     {% endif %}
 
-
+    
 
 {% endblock %}
