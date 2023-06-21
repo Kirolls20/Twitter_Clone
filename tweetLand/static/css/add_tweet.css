@@ -5,9 +5,10 @@
 
 }
 .pop-up{
-    width:500px;
-    height:500px;
-    background:#c3c5d6;
+
+    width:600px;
+    height:600px;
+    background:#0a0a0a;
     border-radius: 6px;
     position: absolute;
     top:50%;
@@ -15,9 +16,12 @@
     transform: translate(-50%,-50%) ;
     display: none;
     z-index: 1;
+
     align-items: center;
     justify-content: center;
     padding:15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 
 }
 .close-btn{
@@ -38,6 +42,7 @@
     margin:10px;
     padding:10px;
     border-radius: 5px;
+    
     
 
 
