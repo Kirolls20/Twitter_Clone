@@ -27,7 +27,7 @@ class HomeView(ListView):
     
 
     def post(self,request):
-        form = TweetForm(request.POST or None)
+        form = TweetForm(request.POST, request.FILES or None)
         if not request.user.is_authenticated:
             messages.warning(request, "Sorry, you are not logged in. Please sign in first and try again!")
             return redirect('home')  # Replace 'login' with your actual login URL

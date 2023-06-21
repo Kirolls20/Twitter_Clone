@@ -23,6 +23,7 @@ class User(AbstractUser):
 class Tweet(models.Model):
     user = models.ForeignKey(User,related_name='tweets' ,on_delete=models.DO_NOTHING)
     tweet = models.CharField(max_length=200,blank=False)
+    tweet_pic = models.ImageField(null=True,blank=True,upload_to='images/tweets')
     likes = models.ManyToManyField(User,related_name='tweet_like',blank=True)
     comments= models.ManyToManyField(User,related_name='tweet_comment',through='Comment')
     created_at = models.DateTimeField(auto_now_add=True)

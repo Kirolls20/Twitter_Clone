@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding Tweet</title>
-    <link rel="stylesheet" href="{% static 'css/add_tweet.css' %}"> 
-    <!-- <link rel="stylesheet" href="{% static 'css/add_comment.css' %}">  -->
+    <link rel="stylesheet" href="{% static 'css/add_tweet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" >
+ 
 </head>
 
 {% block content %}
 <body><br>
-    <h1 style="padding:10px; text-align: center;">Feeds..</h1>
+    <h1 style="padding:10px; position: fixed; top:10;">Explore</h1>
 <div style="display: flex; justify-content: flex-end; margin:40px;">
     <div class="width:100px;">
         <button class="btn btn-secondary" id="showPopup">Add Tweet</button>
@@ -20,7 +21,7 @@
         <div class="container">
             <div class="pop-up" id="popup">
                 <h2 style="text-align: center;">Make A tweet!</h2>
-                <form  method="post">
+                <form  method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div style="justify-content: center;">
                         {{form}}
@@ -37,15 +38,21 @@
 <!-- Looping thru all the tweets  -->
 {% if  tweets %}
     {% for tweet in tweets %}
-    <div class="card text-bg-dark mb-3" style="border:0; padding:none;max-width: 50rem; text-align: center; margin:auto;">
+    <div class="card text- mb-3" style=" border: none; padding:none;max-width: 50rem; text-align: center; margin:auto; background-color: black;">
         <div class="card-header">
             <div class="container">
                 <div class="row">
                     <div class="col-2" style="float:left; position: absolute; left: 0;">
                         {% if  tweet.user.profile_pic %}
-                        <img src="{{tweet.user.profile_pic.url}}" alt="Profile pic" class="rounded-circle" width=50 height=50 >
+                        <a href="{% url 'profile' tweet.user.id %}">
+
+                            <img src="{{tweet.user.profile_pic.url}}" alt="{{tweet.user.username}}" class="rounded-circle" width=45 height=45 >
+                        </a>
                         {% else %}
+                        <a href="{% url 'profile' tweet.user.id %}">
+
                             <img src="{% static 'images/default_profile_pic.jpg' %}" alt="Profile pic" class="rounded-circle" width=50 height=50 >
+                        </a>
 
                         {% endif %}
                     </div>
@@ -79,8 +86,11 @@
                 <li><a class="dropdown-item" href="#">Save for later</a></li>
         </ul>
         </div>
-        <div class="card text-bg-dark mb-3" style="border-radius: 5px; border:#b3a8a8 8px; text-align: center;">
-            <h5 class="text-muted" style="padding:4px;">{{tweet.tweet}}</h5>     
+        <div class="card text-mb-3" style="border-radius: 5px; border:#020202 8px; text-align: center; background-color: black;">
+            <h6  style="padding:3px;">{{tweet.tweet}}</h6> 
+            {% if tweet.tweet_pic %}    
+            <img src="{{tweet.tweet_pic.url}}" class="rounded mx-auto d-block"  alt="Tweet_image" >
+            {% endif %}
                 <hr>
                 <!-- Likes And Comment Section  -->
                 <div class="container">
