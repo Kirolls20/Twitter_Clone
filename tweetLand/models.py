@@ -14,6 +14,7 @@ class User(AbstractUser):
             symmetrical=False,      
             blank=True)
     profile_pic = models.ImageField(null=True,blank=True,upload_to='images/')
+    profile_background = models.ImageField(null=True,blank=True,upload_to='profile_bg/')
     date_created = models.DateField(auto_now_add=True)
     date_modified= models.DateTimeField(auto_now=True)
 

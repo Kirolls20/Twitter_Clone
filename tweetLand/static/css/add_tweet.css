@@ -10,7 +10,7 @@
     height:600px;
     background:#0a0a0a;
     border-radius: 6px;
-    position: absolute;
+    position: absolute; 
     top:50%;
     left:50%;
     transform: translate(-50%,-50%) ;
@@ -46,4 +46,8 @@
     
 
 
+}
+
+#like-anchor:hover{
+    background-color: red;
 }

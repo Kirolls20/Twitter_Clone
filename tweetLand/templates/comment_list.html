@@ -2,12 +2,13 @@
 
 {% load static %}
 {% block content %}
+<br><br><br><br>
 <form action="{% url 'comments_list' tweet_id.id %}" method="post">
     {% csrf_token %}
     <div style="justify-content: center;">
         {{comment_form}}
     </div><br>
-    <button type="submit" class="btn btn-outline-info" >Send Comment</button>
+
 
     <br>
     <hr>

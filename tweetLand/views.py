@@ -1,5 +1,6 @@
 from typing import Any, Dict
 from django.urls import reverse
+from django.http import JsonResponse
 from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.models import User
@@ -139,14 +140,25 @@ class LikesView(LoginRequiredMixin,TemplateView):
         context['likes'] = like_list
         return context
     
-def like_Tweet(request,pk):
+def like_Tweet(request,pk , **kwargs):
     if request.user.is_authenticated:
         tweet = get_object_or_404(Tweet,id=pk)
+        total_likes = Tweet.total_likes
         if tweet.likes.filter(id=request.user.id):
             tweet.likes.remove(request.user)
+            liked = False
         else:
             tweet.likes.add(request.user)
-        return redirect('home')
+            liked = True
+        
+        # anchor= f"#tweet-{tweet.pk}"
+        # url = reverse('home') + anchor
+        # return(redirect(url))
+        response_data = {
+            'liked':liked,
+            'total_likes' :total_likes
+        }
+        return JsonResponse(response_data)
     else:
         messages.warning(request,('You Should Log in First !!'))
         return redirect('home')
