@@ -30,6 +30,7 @@ class Tweet(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
     def total_likes(self):
         return self.likes.count()
 
@@ -39,6 +40,17 @@ class Tweet(models.Model):
     def total_comments(self):
         return self.comments.count()
     
+class SavedTweet(models.Model):
+    user= models.ForeignKey(User,on_delete=models.CASCADE)
+    tweet = models.ForeignKey(Tweet,on_delete=models.CASCADE)
+    saved_time= models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        unique_together = ['user','tweet']
+
+    def __str__(self):
+        return f'{self.user} {self.tweet.tweet}' 
 
 class Comment(models.Model):
     comment = models.TextField()
