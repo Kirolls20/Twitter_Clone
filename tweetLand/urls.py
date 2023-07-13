@@ -16,4 +16,6 @@ urlpatterns = [
     # path('comment/<int:pk>',views.comment_view,name='tweet_comment'),
     path('comment/list/<int:pk>',views.CommentsView.as_view(),name='comments_list'),
     path('likes-for/tweet/<int:pk>',views.LikesView.as_view(),name='likes_page'),
+    path('save-tweet/<int:pk>/',views.save_tweet,name='save_tweet'),
+    path('saved_list/',views.SavedList.as_view(),name='saved_list'),
 ]   

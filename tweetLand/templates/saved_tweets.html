@@ -1,6 +1,21 @@
 {% include 'base.html' %}
+<head>
+    <style>
+        body{
+            margin-top: 50px;   
+        }
+    </style>
+</head>
 
-<h1>Saved Tweets</h1>
 {% block content %}
-
+<body>
+    <h1>Saved Tweets</h1>
+    {% if saved_tweets %}
+    {% for saved_tweet in saved_tweets %}
+        {{saved_tweet}}
+    {% endfor %}
+    {% else %}
+    <h2>No Saved Items</h2>
+    {% endif %}
+</body>
 {% endblock %}

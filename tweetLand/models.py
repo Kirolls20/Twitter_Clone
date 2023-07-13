@@ -34,7 +34,7 @@ class Tweet(models.Model):
     def total_likes(self):
         return self.likes.count()
 
-    def __str__(self):
+    def __str__(self):  
         return f'{self.user.username}  {self.created_at} '
     
     def total_comments(self):

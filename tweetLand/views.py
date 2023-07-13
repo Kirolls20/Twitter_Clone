@@ -2,6 +2,7 @@ from typing import Any, Dict
 from django.urls import reverse
 from django.http import JsonResponse
 from django.shortcuts import render,redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
@@ -10,7 +11,7 @@ from django.contrib import messages
 from django.http import HttpResponse 
 from django.views import View
 from django.views.generic import TemplateView,ListView,DetailView,DeleteView,CreateView,UpdateView
-from .models import Tweet,User,Comment
+from .models import Tweet,User,Comment,SavedTweet
 from .forms import TweetForm,SignupForm,UpdateUserProfileForm,CommentForm
 from django.urls import reverse_lazy 
 # Class Based Views
@@ -162,7 +163,22 @@ def like_Tweet(request,pk , **kwargs):
     else:
         messages.warning(request,('You Should Log in First !!'))
         return redirect('home')
-       
+    
+
+
+@login_required
+def save_tweet(request,pk,**kwargs):
+    tweet_id = get_object_or_404(Tweet,id=pk)
+    if request.method == 'POST':
+        if request.POST.get('save-tweet') == 'save':
+            SavedTweet.objects.create(user=request.user,tweet=tweet_id)
+            messages.success(request,('Tweet saved in your list! '))
+    return redirect('home')
+
+            
+
+
+
 # def comment_view(request,pk):
 #     if request.user.is_authenticated:
 #         tweet_id = get_object_or_404(Tweet,id=pk)
@@ -181,6 +197,15 @@ def like_Tweet(request,pk , **kwargs):
 #         return redirect('home')
 #     return render(request,'comment_list.html',{'comment_form':comment_form})
 
+
+
+class SavedList(LoginRequiredMixin,TemplateView):
+    template_name = 'saved_tweets.html'
+
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        context['saved_tweets'] = SavedTweet.objects.filter(user=self.request.user).all()
+        return context
 
 
 # User Classes and Functions
@@ -229,4 +254,4 @@ class UpdateUserProfileView(LoginRequiredMixin,UpdateView):
                 form.save()
                 messages.success(request,('The Profile has been updated Successfully!'))
                 return redirect('home')
-            
+

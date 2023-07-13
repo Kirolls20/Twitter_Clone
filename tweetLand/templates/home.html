@@ -85,8 +85,12 @@
             
                     <button type="submit" class="dropdown-item">Delete</button>
                 </form> 
-            {% endif %}
-                <li><a class="dropdown-item" href="#">Save for later</a></li>
+                {% endif %}
+                <form  action="{% url 'save_tweet' tweet.id %}" method="post" name="save-tweet" value="save">
+                    {% csrf_token %}
+            
+                    <button type="submit" class="dropdown-item" name="save-tweet" value="save">Save Tweet</button>
+                </form>
         </ul>
         </div>
         <div class="card text-mb-3" style="border-radius: 5px; border:#020202 8px;  background-color: black;">
