@@ -1,4 +1,5 @@
 {% include 'base.html' %}
+{% load static %}
 <head>
     <style>
         body{
@@ -9,10 +10,45 @@
 
 {% block content %}
 <body>
-    <h1>Saved Tweets</h1>
+    <h1>Saved Tweets {{saved_tweets.count}}</h1>
     {% if saved_tweets %}
     {% for saved_tweet in saved_tweets %}
-        {{saved_tweet}}
+    <div  class="card text- mb-3" style="border:2 solid white; padding:none ;max-width: 50rem; text-align: center; margin:auto; background-color: black;">
+        <!-- User Profile Picture  -->
+        <div class="col-2" style="float:left; position: relative; left: 0;">
+            {% if  saved_tweet.user.profile_pic %}
+            <a href="{% url 'profile' saved_tweet.user.id %}">
+                <img src="{{saved_tweet.user.profile_pic.url}}" alt="{{saved_tweet.user.username}}" class="rounded-circle" width=45 height=45 >
+            </a>
+            {% else %}
+            <a href="{% url 'profile' saved_tweet.user.id %}">
+                <img src="{% static 'images/default_profile_pic.jpg' %}" alt="Profile pic" class="rounded-circle" width=50 height=50 >
+            </a>
+
+            {% endif %}
+        </div>
+        <div class="col-8">
+            {{saved_tweet.user.first_name}}
+            <a href="{% url 'profile' saved_tweet.user.id %}" id="username-tag" style="text-decoration:none;color:rgb(83, 83, 83);"> @{{saved_tweet.user|lower}}  ·</a>
+            <small class="text-muted"> saved from {{saved_tweet.saved_time|timesince }} ago</small>
+        </div>
+        <div class="card text-mb-3" style="border-radius: 5px; border:#020202 8px;  background-color: black;">
+            <h6 style="text-align:center;">{{saved_tweet.tweet.tweet}}</h6> 
+            {% if saved_tweet.tweet.tweet_pic %}    
+            <img src="{{saved_tweet.tweet.tweet_pic.url}}"class="rounded mx-auto d-block" style="height: auto; max-width: 100%;"  alt="Tweet_image" >
+            {% endif %}
+                
+               
+            <hr>
+            <form action="{% url 'remove_from_saved' saved_tweet.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger">Remove from saved list</button>
+            </form>
+            <br>
+            </div>  
+        </div> 
+    </div>
+
     {% endfor %}
     {% else %}
     <h2>No Saved Items</h2>

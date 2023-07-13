@@ -18,4 +18,5 @@ urlpatterns = [
     path('likes-for/tweet/<int:pk>',views.LikesView.as_view(),name='likes_page'),
     path('save-tweet/<int:pk>/',views.save_tweet,name='save_tweet'),
     path('saved_list/',views.SavedList.as_view(),name='saved_list'),
+    path('remove_from-saved/<int:pk>/',views.RemoveFromSaved.as_view(),name='remove_from_saved'),
 ]   

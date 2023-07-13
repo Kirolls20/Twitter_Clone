@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -176,7 +176,10 @@ def save_tweet(request,pk,**kwargs):
     return redirect('home')
 
             
-
+class RemoveFromSaved(LoginRequiredMixin, DeleteView):
+    template_name = 'saved_tweets.html'
+    model= SavedTweet
+    success_url = reverse_lazy('saved_list')
 
 
 # def comment_view(request,pk):

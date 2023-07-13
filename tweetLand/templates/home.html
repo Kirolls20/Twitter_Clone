@@ -96,7 +96,7 @@
         <div class="card text-mb-3" style="border-radius: 5px; border:#020202 8px;  background-color: black;">
             <h6 style="text-align:center;">{{tweet.tweet}}</h6> 
             {% if tweet.tweet_pic %}    
-            <img src="{{tweet.tweet_pic.url}}" class="rounded mx-auto d-block"  alt="Tweet_image" >
+            <img src="{{tweet.tweet_pic.url}}" class="rounded mx-auto d-block" style="height: auto; max-width: 100%;" alt="Tweet_image">
             {% endif %}
                 
                 <!-- Likes And Comment Section  -->
