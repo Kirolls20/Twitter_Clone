@@ -12,6 +12,7 @@ urlpatterns = [
     path('accounts/update-profile/<int:pk>',views.UpdateUserProfileView.as_view(),name='update_profile'),
     path('delete-tweet/<int:pk>/',views.DeleteTweetView.as_view(),name='delete_tweet'),
     path('edit-tweet/<int:pk>/',views.EditTweetView.as_view(),name='edit_tweet'),
+    path('tweet/<int:pk>/details/',views.TweetDetails.as_view(),name='tweet_details'),
     path('tweet/<int:pk>/like/',views.like_Tweet,name='like_tweet'),
     # path('comment/<int:pk>',views.comment_view,name='tweet_comment'),
     path('comment/list/<int:pk>',views.CommentsView.as_view(),name='comments_list'),

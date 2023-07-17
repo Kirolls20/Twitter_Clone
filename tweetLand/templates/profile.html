@@ -2,6 +2,14 @@
 {% load static %}
 {% block content %}
 
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+   
+  </style>
+</head>
 <br>
 {% if profile %}
 <!-- Profile image and Tweets  -->
@@ -9,41 +17,29 @@
     <div class="row">
         <div class="col-8">
               </div>
-              {% if profile.profile_background %}
-                <img src="{{profile.profile_background.url}}" class="card-img-bottom" alt="..." width="400" height="100" style="background-size:cover;">
+              <div class="background-profile">
+                {% if profile.profile_background %}
+                <img src="{{profile.profile_background.url}}"  alt="..."style="background-size:cover; background-position:center;background-repeat:no-repeat; width:100%;height: 60px;;">
               {% else %}
-              <img src="{% static 'images/default_profile_pic.jpg'%} " class="card-img-bottom" alt="..." width="400" height="100" style="background-size:cover;">
+              <img src="{% static 'images/default_profile_pic.jpg'%} " style="background-size:cover; background-position:center;background-repeat:no-repeat; width:100%;height: 60px;;">
               {% endif %}
-            <h2>{{profile.username}} Profile</h2>
-            <div class="col-4" >
+              </div>
+             
+            <div class="col-3" >
+                <div class="profile-pic">
                 {% if profile.profile_pic %}
-                <img src="{{profile.profile_pic.url}}"  alt="Profile picture" style="padding:10px; border-radius: 50%;" width="300" height="300" >
-                <br>
-                <small>{{tweets.count}} Tweets</small><br>
-                <small>{{profile.bio}}</small>
+                    <img src="{{profile.profile_pic.url}}"  alt="Profile picture" style="padding:10px; border-radius: 50%; background-size: cover;" width="250" height="250"  >
+                    <h5>{{profile.first_name}} {{profile.last_name}}</h5> <p class="text-muted">@{{profile|lower}} ({{tweets.count}} Tweets)</p>
+                    <small class="text-muted"><a href="">{{profile.follows.count}} following</a>  <a href="">{{profile.followed_by.count}} followers</a></small> 
+                    <small>{{profile.bio}}</small>
                 {% else %}
                     <img src="{% static 'images/default_profile_pic.jpg'%}"  alt="Profile picture" style="padding:10px; border-radius: 50%;">
-                    <br>
-                    <small>{{tweets.count}} Tweets</small><br>
+                    <h5>{{profile.first_name}} {{profile.last_name}}</h5> <p class="text-muted">@{{profile|lower}} ({{tweets.count}} Tweets)</p>
+                    <small class="text-muted"><a href="">{{profile.follows.count}} following</a> <a href=""> {{profile.followed_by.count}} followers</a></small> 
                     <small>{{profile.bio}}</small>
                 {% endif %}
-                <div class="card border-success mb-3" style="max-width: 18rem;">
-                    <div class="card-header bg-transparent border-success">{{profile.follows.count}} Follows You </div>
-                    <div class="card-body text-success">
-                        {% for follow in profile.follows.all %} 
-                            <a href="{% url 'profile' follow.id %}"> @{{follow|lower}}</a><br>     
-                        {% endfor %} 
-                    </div>
-                  </div>
-                  <div class="card border-success mb-3" style="max-width: 18rem;">
-                    <div class="card-header bg-transparent border-success"> You Followed_by {{profile.followed_by.count }}</div>
-                    <div class="card-body text-success">
-                        {% for followed in profile.followed_by.all %}
-                            <a href="{% url 'profile' followed.id %}">@{{followed|lower}}</a><br>
-                      {% endfor %}
-                    </div>
-                  </div>
-                  
+                </div>
+                
                   <form action="{% url 'profile' profile.id %}" method="post">
                     {% csrf_token %}
                     {% if profile in user.follows.all %}
@@ -57,61 +53,166 @@
                   <a href="{% url 'update_profile' profile.id %}" class="btn btn-outline-primary">Update Profile </a>
                   {% endif %}
                 </div>
+            </div>
+        </div><br>
+        {% endif %}
+            <!-- Add this code wherever you want to display the navigation menu -->
+            <nav class="nav nav-pills flex-column flex-sm-row">
+                <a class="flex-sm-fill text-sm-center nav-link active" data-toggle="collapse" data-target="#tweets">Tweets</a>
+                <a class="flex-sm-fill text-sm-center nav-link " data-toggle="collapse" data-target="#replies">Replies</a>
+                <a class="flex-sm-fill text-sm-center nav-link " data-toggle="collapse" data-target="#replies">Likes</a>
+          
+        </nav>
+  
     
-        </div>
-    </div>
-    
-    {% endif %}
-            {% if tweets %}
-            
+        {% if tweets %}
+        
+        <br>
+        <section id="tweets" class="collapse show">
                 {% for tweet in tweets.all %}
-                <div class="card">
-                    <div  style="float: right; padding:10px;">
-                    <!-- Edit Button -->
-                    <a href="{% url 'edit_tweet' tweet.id %}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                          </svg>
-                    </a>
-                    <!-- Delete Button -->
-                    <form  action="{%  url 'delete_tweet' tweet.id %}" method="post"  onclick="window.location.href='{% url 'profile' profile.pk  %}'; return true ;" onsubmit=" return ConfirmSubmition()">
-                        {% csrf_token %}
-                        <button type="submit" class="dropdown-item" >   
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                              </svg>
-                        </button>
-                    </form> 
-                </div>
-                    <div class="card-body">
-                        <h4 class="text-muted">{{tweet.tweet}}</h4>
-                        
-                        <small class="text-muted">{{tweet.updated_at}}</small>
-                        <!-- Like  -->
-                        <small class="text-muted" style="margin-left:20px;">{{tweet.total_likes}} Likes</small>
-                        {% if request.user in tweet.likes.all %}
-                            <a href="{% url 'like_tweet' tweet.id %}"style="margin-left:20px;" >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                                  </svg>
-                            </a>
+
+                <div id="tweets" class="card text- mb-3" style="border:2 solid white; padding:none ;max-width: 50rem; text-align: center; margin:auto; background-color: black;">
+                    <!-- User Profile Picture  -->
+                    <div class="col-2" style="float:left; position: absolute; left: 0;">
+                        {% if  tweet.user.profile_pic %}
+                        <a href="{% url 'profile' tweet.user.id %}">
+                            <img src="{{tweet.user.profile_pic.url}}" alt="{{tweet.user.username}}" class="rounded-circle" width=45 height=45 >
+                        </a>
                         {% else %}
-                            <a href="{% url 'like_tweet' tweet.id %}"style="margin-left:20px;" >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                                </svg>
-                            </a>
+                        <a href="{% url 'profile' tweet.user.id %}">
+                            <img src="{% static 'images/default_profile_pic.jpg' %}" alt="Profile pic" class="rounded-circle" width=50 height=50 >
+                        </a>
+            
                         {% endif %}
                     </div>
-                    </div><br>  
+                    <div class="col-7">
+                        {{tweet.user.first_name}}
+                        <a href="{% url 'profile' tweet.user.id %}" id="username-tag" style="text-decoration:none;color:rgb(83, 83, 83);"> @{{tweet.user|lower}}  ·</a>
+                        <small class="text-muted">{{tweet.updated_at|timesince }} ago</small>
+                    </div>
+                  <!-- Drop down options -->
+                   <div class="dropdown">
+                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="float:right; border:0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                            </svg>
+                        </button>
+                    <ul class="dropdown-menu">
+                        {% if tweet.user == request.user %}
+                            <!-- Edit Form --> 
+                            <li><a class="dropdown-item" href="{% url 'edit_tweet' tweet.id %}">Edit</a></li>
+                            <!-- Delete Form  -->
+                            <form  action="{%  url 'delete_tweet' tweet.id %}" method="post" onsubmit=" return  ConfirmSubmition()">
+                                {% csrf_token %}
+                        
+                                <button type="submit" class="dropdown-item">Delete</button>
+                            </form> 
+                            {% endif %}
+                            <form  action="{% url 'save_tweet' tweet.id %}" method="post" name="save-tweet" value="save">
+                                {% csrf_token %}
+                        
+                                <button type="submit" class="dropdown-item" name="save-tweet" value="save">Save Tweet</button>
+                            </form>
+                    </ul>
+                    </div>
+                    <div class="card text-mb-3" style="border-radius: 5px; border:#020202 8px;  background-color: black;">
+                        <h6 style="text-align:center;">{{tweet.tweet}}</h6> 
+                        {% if tweet.tweet_pic %}    
+                        <img src="{{tweet.tweet_pic.url}}" class="rounded mx-auto d-block" style="height: auto; max-width: 100%;" alt="Tweet_image">
+                        {% endif %}
+                            
+                            <!-- Likes And Comment Section  -->
+                            <div class="container">
+                                <div class="row">
+                                </div>
+                                <div class="col-3">
+                                    
+                                    {% if request.user in tweet.likes.all %}
+                                    <a href="{% url 'like_tweet' tweet.id %}" class="like-btn liked" data-tweet-id="{{tweet.pk}}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                        </svg>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'like_tweet' tweet.id %}" class="like-btn" data-tweet-id="{{tweet.pk}}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                        </svg>
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'likes_page'  tweet.id %}" style="text-decoration: none; margin:3px;">
+                                    <small class="total-likes" style="margin-left:20px;">{{tweet.total_likes}}</small>
+                                </a>
+            
+                                </div>
+                                <div class="col-8">
+                                    
+                                    <!-- <button class="show-comment-popup" data-tweetid="{{ tweet.id }}">Open Popup</button> -->
+                                <a href="{% url 'comments_list'  tweet.id %}" style="text-decoration:none;color:rgb(48, 48, 54);">
+                                    <!-- <small class="text-muted" style="margin-left:20px;">{{tweet.total_comments}} Comments</small> -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-text-fill" viewBox="0 0 16 16">
+                                        <path d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.5 5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zm0 2.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zm0 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z"/>
+                                    </svg>
+                                        {{tweet.total_comments}}
+                                    
+                                </a>     
+                                     <!-- Retweet Icone -->
+                  
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="20" height="20" fill="currentColor" style="float:right;">
+                                        <path d="M614.2 334.8C610.5 325.8 601.7 319.1 592 319.1H544V176C544 131.9 508.1 96 464 96h-128c-17.67 0-32 14.31-32 32s14.33 32 32 32h128C472.8 160 480 167.2 480 176v143.1h-48c-9.703 0-18.45 5.844-22.17 14.82s-1.656 19.29 5.203 26.16l80 80.02C499.7 445.7 505.9 448 512 448s12.28-2.344 16.97-7.031l80-80.02C615.8 354.1 617.9 343.8 614.2 334.8zM304 352h-128C167.2 352 160 344.8 160 336V192h48c9.703 0 18.45-5.844 22.17-14.82s1.656-19.29-5.203-26.16l-80-80.02C140.3 66.34 134.1 64 128 64S115.7 66.34 111 71.03l-80 80.02C24.17 157.9 22.11 168.2 25.83 177.2S38.3 192 48 192H96V336C96 380.1 131.9 416 176 416h128c17.67 0 32-14.31 32-32S321.7 352 304 352z"/>
+                                        0
+                                    </svg>       
+                                </div>
+                                <hr>
+                            </div>
+                        </div>  
+                    </div> 
+                </div>
+                
                 {% endfor %}
             {% endif %}
-        </div>
-        <!-- Follows and followed by  -->
-        
+    </section>
+          
+            
+    <section id="replies" class="collapse">
+      Replies 
+       {% for comment in comments %}
+       <button type="button" class="list-group-item list-group-item-action" disabled>
+        {% if comment.user.profile_pic %}
+        <img src="{{comment.user.profile_pic.url }}" alt="" class="rounded-circle" width=30 height=30 >
+        {% else %}
+        <img src="{% static 'images/default_profile_pic.jpg' %}" alt="Profile pic" class="rounded-circle" width=30 height=30 >
+        {% endif %}
+        <a href="{% url 'profile' comment.user.id %}" style="text-decoration: none;">@ {{comment.user|lower}}</a> - {{comment.comment}} 
+        <small class="text-muted" style="padding:10px;">{{comment.updated_at|timesince }} ago</small><small><a href="#">Show The Tweet</a></small>
+    
+    </button>
+       {% endfor %}
+    </section>
+    </div>
+ 
+<!-- Add these lines within the <head> section of your template -->
+ 
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+<!-- Add this line within the <head> section of your template, after Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <script>
+    // This Code for navigation nav 
+    $(document).ready(function() {
+      $('.nav-link').on('click', function() {
+    $('.nav-link').removeClass('active'); // Remove 'active' class from all links
+    $(this).addClass('active'); // Add 'active' class to the clicked link
+  });
+  // Collapse toggle
+  $('[data-toggle="collapse"]').on('click', function() {
+    var target = $(this).data('target');
+    $(target).collapse('toggle');
+
+  });
+});
     function ConfirmSubmition (){
         var onSubmit = confirm('Are You Sure you Want to Delete this Tweet?');
 

@@ -89,6 +89,7 @@ class ProfileView(LoginRequiredMixin,DetailView):
         context= super().get_context_data(**kwargs)
         context['profile'] = User.objects.get(id=self.kwargs['pk'])
         context['tweets']  = Tweet.objects.filter(user=self.kwargs['pk']).order_by('-updated_at') ## HERE A PROBLEM ###
+        context['comments'] = Comment.objects.filter(user=self.kwargs['pk']).all()
         return context
 
     # Follow and unfollow Function
@@ -141,6 +142,7 @@ class LikesView(LoginRequiredMixin,TemplateView):
         context['likes'] = like_list
         return context
     
+
 def like_Tweet(request,pk , **kwargs):
     if request.user.is_authenticated:
         tweet = get_object_or_404(Tweet,id=pk)
@@ -151,18 +153,17 @@ def like_Tweet(request,pk , **kwargs):
         else:
             tweet.likes.add(request.user)
             liked = True
-        
-        # anchor= f"#tweet-{tweet.pk}"
-        # url = reverse('home') + anchor
-        # return(redirect(url))
-        response_data = {
-            'liked':liked,
-            'total_likes' :total_likes
-        }
-        return JsonResponse(response_data)
+            # anchor= f"#tweet-{tweet.pk}"
+            # url = reverse('home') + anchor
+            # return(redirect(url))
+            response_data = {
+                'liked':liked,
+                'total_likes' :total_likes
+            }
+            return JsonResponse(response_data)
     else:
         messages.warning(request,('You Should Log in First !!'))
-        return redirect('home')
+        return redirect('login')
     
 
 
@@ -200,7 +201,10 @@ class RemoveFromSaved(LoginRequiredMixin, DeleteView):
 #         return redirect('home')
 #     return render(request,'comment_list.html',{'comment_form':comment_form})
 
-
+class TweetDetails(LoginRequiredMixin,DetailView):
+    template_name= 'tweet_details.html'
+    model= Tweet
+    context_object_name = 'tweet'
 
 class SavedList(LoginRequiredMixin,TemplateView):
     template_name = 'saved_tweets.html'
@@ -209,6 +213,8 @@ class SavedList(LoginRequiredMixin,TemplateView):
         context= super().get_context_data(**kwargs)
         context['saved_tweets'] = SavedTweet.objects.filter(user=self.request.user).all()
         return context
+
+
 
 
 # User Classes and Functions

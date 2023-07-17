@@ -93,11 +93,13 @@
                 </form>
         </ul>
         </div>
+        <a href="{% url 'tweet_details' tweet.id %}" style="text-decoration: none;">
         <div class="card text-mb-3" style="border-radius: 5px; border:#020202 8px;  background-color: black;">
             <h6 style="text-align:center;">{{tweet.tweet}}</h6> 
             {% if tweet.tweet_pic %}    
             <img src="{{tweet.tweet_pic.url}}" class="rounded mx-auto d-block" style="height: auto; max-width: 100%;" alt="Tweet_image">
             {% endif %}
+        </a>
                 
                 <!-- Likes And Comment Section  -->
                 <div class="container">
@@ -186,7 +188,6 @@
     });
 });
 
-
 // Cretae Tweet
 document.getElementById('showPopup').addEventListener('click', function() {
     console.log('Clicked!')
@@ -202,12 +203,5 @@ function ConfirmSubmition(){
     var onConfirm = confirm('Are You Sure you Want to Delete this Tweet?')
     return onConfirm;
 }
-
 </script>
-
-
-
-
-
-
 </body>
